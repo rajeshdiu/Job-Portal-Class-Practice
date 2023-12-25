@@ -13,3 +13,4 @@ admin.site.register(job_model)
 
 admin.site.register(RecruiterProfile)
 admin.site.register(JobSeekerProfile)
+admin.site.register(jobApplyModel)

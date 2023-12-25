@@ -22,7 +22,11 @@ urlpatterns = [
     path('changePasswordPage/',changePasswordPage,name='changePasswordPage'),
     path('Post_or_Applied_Job_Page/',Post_or_Applied_Job_Page,name='Post_or_Applied_Job_Page'),
     path('Applied_Job_By_Applicants_Page/',Applied_Job_By_Applicants_Page,name='Applied_Job_By_Applicants_Page'),
+    path('applicant_list/<str:myid>',applicant_list,name='applicant_list'),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

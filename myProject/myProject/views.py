@@ -13,6 +13,7 @@ from django.contrib import messages
 
 from myApp.models import *
 
+from django.templatetags.static import static  # Import the static function
 
 def signupPage(request):
     if request.method == "POST":
@@ -21,11 +22,13 @@ def signupPage(request):
         mail = request.POST.get('email')
         pass_word = request.POST.get('password')
         usertype = request.POST.get('user_type')
+        default_profile_pic_url = static('img/default_profile_pic.png')  # Adjust the path as per your project structure
 
         user = Custom_User.objects.create_user(username=user_name, password=pass_word)
         user.display_name = displayname
         user.email = mail
         user.user_type = usertype
+        user.profile_pic = default_profile_pic_url  # Set the default profile picture URL
         user.save()
 
         # Create corresponding profile
@@ -38,6 +41,7 @@ def signupPage(request):
         return redirect("signinPage")
 
     return render(request, 'signup.html')
+
 
 def changePasswordPage(request):
     if request.method == 'POST':
@@ -175,11 +179,35 @@ def updatePage(request):
 
 @login_required
 def applyPage(request,myid):
-
-    job=job_model.objects.filter(id=myid)
     
 
-    return render(request,'JobSeeker/applyjob.html')
+    job = get_object_or_404(job_model, id=myid)
+    
+    if request.method == 'POST':
+        skills = request.POST.get('skills')
+        resume = request.FILES.get('resume')
+        
+        if skills and resume:
+            applicant = request.user
+            
+            application = jobApplyModel.objects.create(
+                job=job,
+                applicant=applicant,
+                skills=skills,
+                resume=resume,
+            )
+            
+            application.save()
+            messages.success(request, 'Application submitted successfully!')
+            return redirect("Applied_Job_By_Applicants_Page")
+        else:
+            messages.error(request, 'Error in the application form. Please check the fields.')
+            
+    context={
+        'job':job
+            }
+
+    return render(request,'JobSeeker/applyjob.html',context)
 
 
 @login_required
@@ -265,8 +293,30 @@ def Post_or_Applied_Job_Page(request):
 
 def Applied_Job_By_Applicants_Page(request):
 
+    job_seeker=request.user
+    
+    applied_job=jobApplyModel.objects.filter(applicant=job_seeker)
+    
+    context={
+        'applied_job':applied_job,
+        
+    }
+    
+    return render(request,'JobSeeker/AppliedJob.html',context)
 
 
-    return render(request,'JobSeeker/AppliedJob.html')
+def applicant_list(request,myid):
+    
+    myJob = get_object_or_404(job_model, id=myid)
+    applicants = jobApplyModel.objects.filter(job=myJob)
+    context = {
+        'job': myJob,
+        'applicants': applicants,
+    }
+    
+    
+    return render(request,"Recruiter/applicant_list.html",context)
+
+
 
 

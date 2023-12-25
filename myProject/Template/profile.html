@@ -82,36 +82,31 @@
 
     <div class="profile-container">
         <div class="profile-header">
-                
-                
-                <img class="profile-picture" src="/{{user.profile_pic}}" alt="Profile Picture">
-                      
-                {% if messages %}
+            {% if user.profile_pic %}
+                <img class="profile-picture" src="/{{ user.profile_pic}}" alt="Profile Picture">
+            {% else %}
+            <img class="profile-picture" src="{% static '/static/img/default.png' %}" alt="Default Profile Picture">
+            {% endif %}
+            
+            {% if messages %}
                 {% for message in messages %}
-                {% if message.tags == 'success' %}
-                <p>{{message}}</p>
-                {% endif %}
+                    {% if message.tags == 'success' %}
+                        <p>{{ message }}</p>
+                    {% endif %}
                 {% endfor %}
-                {% endif %}
-                    
+            {% endif %}
 
             <p>{{ request.user.display_name }}</p>
             <p>{{ request.user.email }}</p>
-            <p>{{request.user.about}}</p>
+            <p>{{ request.user.about }}</p>
             <a href="{% url 'EditProfilePage' %}" class="edit-profile-button">Edit Profile</a>
             <a href="{% url 'changePasswordPage' %}" class="edit-profile-button">Change Password</a>
 
-            
             {% if user.user_type == 'recruiter' %}
-            
-            <a href="{% url 'Post_or_Applied_Job_Page' %}" class="edit-profile-button">Created Job</a>
-
+                <a href="{% url 'Post_or_Applied_Job_Page' %}" class="edit-profile-button">Created Job</a>
             {% elif user.user_type == 'jobseeker' %}
-
-            <a href="{% url 'Applied_Job_By_Applicants_Page' %}" class="edit-profile-button">Applied Job</a>
-                
+                <a href="{% url 'Applied_Job_By_Applicants_Page' %}" class="edit-profile-button">Applied Job</a>
             {% endif %}
-                
         </div>
     
         <div class="profile-info">
@@ -128,7 +123,6 @@
         </div>
     </div>
     
-
 </body>
 </html>
 

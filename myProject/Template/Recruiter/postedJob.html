@@ -55,7 +55,7 @@
       
       <a href="{% url 'editPage' i.id %}">Edit</a>
       <a href="{% url 'deletePage' i.id %}">Delete</a>
-      <a href="">Applicants</a>
+      <a href="{% url 'applicant_list' i.id %}">Applicants</a>
 
     </td>
   </tr>
@@ -63,6 +63,7 @@
 </table>
 
 </body>
+
 </html>
 
 {% endblock content %}

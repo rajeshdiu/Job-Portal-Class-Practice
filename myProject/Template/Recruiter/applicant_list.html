@@ -1,0 +1,85 @@
+{% extends "dashboard.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Form</title>
+    <style>
+            body {
+              font-family: Arial, sans-serif;
+            }
+          
+            .container {
+              max-width: 800px;
+              margin: 0 auto;
+            }
+          
+            .applicant-list {
+              list-style-type: none;
+              padding: 0;
+            }
+          
+            .applicant-item {
+              border: 1px solid #ccc;
+              margin-bottom: 15px;
+              padding: 15px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
+          
+            .applicant-info {
+              flex-grow: 1;
+            }
+          
+            .applicant-name {
+              font-weight: bold;
+              margin-bottom: 5px;
+            }
+          
+            .resume-link a {
+              text-decoration: none;
+              background-color: #4caf50;
+              color: white;
+              padding: 8px 12px;
+              border-radius: 4px;
+              display: inline-block;
+              transition: background-color 0.3s;
+            }
+          
+            .resume-link a:hover {
+              background-color: #45a049;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Applicants for {{ job.job_title }}</h2>
+        <ul class="applicant-list">
+          {% for applicant in applicants %}
+            <li class="applicant-item">
+              <div class="applicant-info">
+                <p class="applicant-name">Applicant: {{ applicant.applicant.display_name }}</p>
+                <p class="applicant-skills">Skills: {{ applicant.skills }}</p>
+                <p class="applicant-applied-at">Applied at: {{ applicant.applied_at }}</p>
+              </div>
+              <div class="resume-link">
+                <a href="{{ applicant.resume.url }}" target="_blank">View Resume</a>
+                <a href="" >Approve</a>
+                <a href="" >Delete</a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+</body>
+</html>
+
+
+{% endblock content %}

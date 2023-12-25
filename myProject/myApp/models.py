@@ -18,6 +18,8 @@ class Custom_User(AbstractUser):
         return self.display_name
     
 
+    
+
 class job_model(models.Model):
     job_title = models.CharField(max_length=100, null=True)
     company_name = models.CharField(max_length=100, null=True)
@@ -27,18 +29,19 @@ class job_model(models.Model):
     update_at = models.DateTimeField(auto_now=True, null=True)
     job_creator = models.ForeignKey(Custom_User, on_delete=models.CASCADE)
 
-    def save(self, *args, **kwargs):
-        if not self.id:
-            # This is a new instance, set create_at and update_at to current time
-            self.create_at = timezone.now()
-            self.update_at = timezone.now()
-        else:
-            # This is an update, only set update_at to current time
-            self.update_at = timezone.now()
-        super().save(*args, **kwargs)
-
     def __str__(self):
         return self.job_title
+        
+class jobApplyModel(models.Model):
+    
+    job=models.ForeignKey(job_model,on_delete=models.CASCADE,related_name='applications')
+    applicant=models.ForeignKey(Custom_User,on_delete=models.CASCADE)
+    applied_at = models.DateTimeField(auto_now_add=True)
+    skills = models.CharField(max_length=255, blank=True, null=True)
+    resume = models.FileField(upload_to='resumes/', blank=True, null=True)
+    
+    def __str__(self):
+        return f"{self.applicant.display_name} applied for {self.job.job_title}"
 
 class RecruiterProfile(models.Model):
     user = models.OneToOneField(Custom_User,on_delete=models.CASCADE,null=True, related_name='recruiterprofile')
@@ -54,6 +57,8 @@ class JobSeekerProfile(models.Model):
     
     def __str__(self):
         return self.user.display_name
+    
+
     
 
     
