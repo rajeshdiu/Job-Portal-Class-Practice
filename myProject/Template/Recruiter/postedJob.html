@@ -1,0 +1,68 @@
+{% extends "dashboard.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}
+</style>
+</head>
+<body>
+
+
+<table id="customers">
+  <tr>
+    <th>Job Title</th>
+    <th>Location</th>
+    <th>Description</th>
+    <th>Create at</th>
+    <th>update at</th>
+    <th>Actions</th>
+  </tr>
+  {% for i in posted_job %}
+  <tr>
+    
+        
+    <td>{{i.job_title}}</td>
+    <td>{{i.location}}</td>
+    <td>{{i.description}}</td>
+    <td>{{i.create_at}}</td>
+    <td>{{i.update_at}}</td>
+    <td>
+      
+      <a href="{% url 'editPage' i.id %}">Edit</a>
+      <a href="{% url 'deletePage' i.id %}">Delete</a>
+      <a href="">Applicants</a>
+
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+</body>
+</html>
+
+{% endblock content %}

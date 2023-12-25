@@ -1,0 +1,36 @@
+{% extends "dashboard.html" %}
+
+{% block content %}
+<section class="job-listings"> 
+    <h2>Latest Job Listings</h2> 
+    <ul> 
+        {% for i in job %}
+        <li> 
+            <h3>{{i.job_title}}</h3> 
+            <p>Company: {{i.company_name}}</p> 
+            <p>Location: {{i.location}}</p> 
+            <p>Description: {{i.description}}</p> 
+            
+            <p>Create By: {{i.job_creator}}</p> 
+            <p>Create Time: {{i.create_at}}</p> 
+            
+            {% if i.update_at %}
+                {% if i.create_at != i.update_at %}
+                    <p>Update Time: {{i.update_at}}</p>
+                {% endif %}
+            {% endif %}
+                
+            {% if user.user_type == 'jobseeker' %}
+            <a href=" {% url "applyPage" i.id %} ">Apply Now</a> 
+            {% endif %}
+
+            {% if user.user_type == 'recruiter' and user.id == i.job_creator.id %}
+            <a href=" {% url "editPage" i.id %} ">Edit</a> 
+            <a href=" {% url "deletePage" i.id %} ">Delete</a> 
+            {% endif %}
+        </li> 
+        {% endfor %}
+    </ul> 
+</section> 
+
+{% endblock content %}
