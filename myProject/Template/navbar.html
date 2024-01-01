@@ -1,26 +1,22 @@
 {% block content %}
-
 <nav>
-
-
-    {% comment %} Recruiter can access below menu {% endcomment %}
-    
-   {% if user.user_type == 'recruiter' %}
-   
-   <a href="#home">Home</a>
-   <a href=" {% url "add_job_Page" %}" >Add Job</a>
-   <a href="{% url "viewjobPage" %}">View Job</a>
-   <a href="{% url "ProfilePage" %}">Profile</a>
-   <a href="{% url "logoutPage" %}">Logout</a>
-
-   {% comment %} Job Seeker can access below menu {% endcomment %}
-
-    {% elif user.user_type == 'jobseeker' %}
+    {% comment %} Common menu for both recruiter and job seeker {% endcomment %}
     <a href="#home">Home</a>
     <a href="{% url "viewjobPage" %}">View Job</a>
     <a href="{% url "ProfilePage" %}">Profile</a>
     <a href="{% url "logoutPage" %}">Logout</a>
-   {% endif %}
 
+    <!-- {% comment %} Additional menu for recruiter to add jobs {% endcomment %} -->
+    {% if user.user_type == 'recruiter' %}
+        <a href="{% url "add_job_Page" %}">Add Job</a>
+    {% endif %}
+
+    <!-- {% comment %} Search form for job seekers {% endcomment %} -->
+        {% if user.user_type == 'jobseeker' %}
+    <form method="GET" action="{% url 'searchResultsPage' %}" class="search-form">
+        <input type="text" name="search_query" placeholder="Search Jobs">
+        <button type="submit">Search</button>
+    </form>
+{% endif %}
 </nav>
 {% endblock content %}

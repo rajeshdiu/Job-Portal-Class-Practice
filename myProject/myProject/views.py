@@ -176,39 +176,49 @@ def updatePage(request):
 
     return render(request, 'Recruiter/updateJob.html')
 
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseForbidden
 
 @login_required
-def applyPage(request,myid):
-    
-
+def applyPage(request, myid):
+    count=False
     job = get_object_or_404(job_model, id=myid)
-    
+    user = request.user
+
+    Already_applied_job=jobApplyModel.objects.filter(job=job, applicant=user).exists()
+    # Check if the user has already applied for this job
+    if Already_applied_job:
+        count=True
+        # You can redirect to a page or show a message indicating that the user has already applied.
+        return HttpResponseForbidden("You have already applied for this job.")
+
     if request.method == 'POST':
         skills = request.POST.get('skills')
         resume = request.FILES.get('resume')
-        
+
         if skills and resume:
-            applicant = request.user
-            
+            applicant = user
+
             application = jobApplyModel.objects.create(
                 job=job,
                 applicant=applicant,
                 skills=skills,
                 resume=resume,
             )
-            
+
             application.save()
             messages.success(request, 'Application submitted successfully!')
             return redirect("Applied_Job_By_Applicants_Page")
         else:
             messages.error(request, 'Error in the application form. Please check the fields.')
-            
-    context={
-        'job':job
-            }
 
-    return render(request,'JobSeeker/applyjob.html',context)
+    context = {
+        'count':count,
+        'job': job,
+        'Already_applied_job':Already_applied_job,
+    }
 
+    return render(request, 'JobSeeker/applyjob.html', context)
 
 @login_required
 def ProfilePage(request):
@@ -316,6 +326,26 @@ def applicant_list(request,myid):
     
     
     return render(request,"Recruiter/applicant_list.html",context)
+ 
+def searchResultsPage(request):
+    
+    try:
+        query=request.GET.get("search_query")
+        
+        if query:
+            jobs=job_model.objects.filter(job_title__icontains=query)
+        else:
+            jobs=[]
+            
+        context={
+            'query':query,
+            'jobs':jobs,
+        }
+        
+        return render(request,'JobSeeker/search_results.html',context)
+    except Exception as e:
+        return render(request,'JobSeeker/error.html',{'error_message':str(e)})
+
 
 
 

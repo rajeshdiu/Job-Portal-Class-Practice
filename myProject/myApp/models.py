@@ -57,10 +57,3 @@ class JobSeekerProfile(models.Model):
     
     def __str__(self):
         return self.user.display_name
-    
-
-    
-
-    
-
-

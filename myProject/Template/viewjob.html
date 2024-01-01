@@ -21,8 +21,14 @@
             {% endif %}
                 
             {% if user.user_type == 'jobseeker' %}
-            <a href=" {% url "applyPage" i.id %} ">Apply Now</a> 
+                <p>Already Applied: {{ Already_applied_job }}</p>
+                {% if not Already_applied_job %}
+                    <a href="{% url "applyPage" i.id %}">Apply Now</a> 
+                {% else %}
+                    <button disabled>Applied</button>
+                {% endif %}
             {% endif %}
+                            
 
             {% if user.user_type == 'recruiter' and user.id == i.job_creator.id %}
             <a href=" {% url "editPage" i.id %} ">Edit</a> 

@@ -19,6 +19,7 @@ urlpatterns = [
     path('applyPage/<str:myid>',applyPage,name='applyPage'),
     path('ProfilePage/',ProfilePage,name='ProfilePage'),
     path('EditProfilePage/',EditProfilePage,name='EditProfilePage'),
+    path('searchResultsPage/',searchResultsPage,name='searchResultsPage'),
     path('changePasswordPage/',changePasswordPage,name='changePasswordPage'),
     path('Post_or_Applied_Job_Page/',Post_or_Applied_Job_Page,name='Post_or_Applied_Job_Page'),
     path('Applied_Job_By_Applicants_Page/',Applied_Job_By_Applicants_Page,name='Applied_Job_By_Applicants_Page'),
